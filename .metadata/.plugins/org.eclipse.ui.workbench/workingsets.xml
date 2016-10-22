@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workingSetManager>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1476415273463_1" label="bitcoinj-parent" name="bitcoinj-parent">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/examples" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/wallettemplate" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/core" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/tools" type="4"/>
+</workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1476415242312_0" label="Window Working Set" name="Aggregate for window 1476415242312"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1476601998245_2" label="Window Working Set" name="Aggregate for window 1476601998245"/>
+</workingSetManager>
