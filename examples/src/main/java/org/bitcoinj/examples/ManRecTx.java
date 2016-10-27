@@ -71,7 +71,7 @@ public class ManRecTx {
 	        Set<Transaction> transactions = wallet3.wallet().getTransactions(true);
 
 //	        System.out.println("isEmpty "+transactions.isEmpty()+"\n");
-	        temp = new Transaction(params, hexStringToByteArray("0100000001df64ad4051796dc616a16c798d3c0381219f4d4418c1d335e80077b233e33877010000006b483045022100f5664de61bd0c9576d7dd2aaf98f2ba4e60c1013e55a36e62bf1d47c38a0fb5c02206872b35821f05069df5d2302dadc55011e6e6d7569e2e46c655deb9265390f3f0121035562c04ff3ddb5a8ba566f4cd84c3e47478997ab8730bd923a4260fc9dfe246effffffff0200f90295000000002c76a914d713cf366138ad0d0aac8c148ca724c18a8c4e4d88ac6910e04fd020ea3a6910a2d808002b30309d87f4c80295000000001976a9142515ad4a14c15cc363796684149fd23ae1c3146e88ac00000000") );
+	        temp = new Transaction(params, hexStringToByteArray("") );
 //	        temp = (Transaction) transactions.toArray()[0];
 	        
 	        output = temp.getOutput(0);	        

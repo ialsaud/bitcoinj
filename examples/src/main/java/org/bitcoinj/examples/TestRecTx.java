@@ -2,6 +2,8 @@ package org.bitcoinj.examples;
 
 
 import org.bitcoinj.core.*;
+import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.bitcoinj.crypto.TransactionSignature;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.utils.BriefLogFormatter;
@@ -63,18 +65,36 @@ public class TestRecTx {
 	        wallet4.startAsync();
 	        wallet4.awaitRunning();
         
-	        TransactionOutput output;
-	        Transaction temp;
+	        
+	        
 	        Address address4 = wallet4.wallet().currentReceiveAddress();
+	        Address address3 = wallet3.wallet().currentReceiveAddress();
 	        Set<Transaction> transactions = wallet3.wallet().getTransactions(true);
-	        temp = new Transaction(params, hexStringToByteArray("0100000001df64ad4051796dc616a16c798d3c0381219f4d4418c1d335e80077b233e33877010000006b483045022100f5664de61bd0c9576d7dd2aaf98f2ba4e60c1013e55a36e62bf1d47c38a0fb5c02206872b35821f05069df5d2302dadc55011e6e6d7569e2e46c655deb9265390f3f0121035562c04ff3ddb5a8ba566f4cd84c3e47478997ab8730bd923a4260fc9dfe246effffffff0200f90295000000002c76a914d713cf366138ad0d0aac8c148ca724c18a8c4e4d88ac6910e04fd020ea3a6910a2d808002b30309d87f4c80295000000001976a9142515ad4a14c15cc363796684149fd23ae1c3146e88ac00000000") );
-	        output = temp.getOutput(0);	        
+	        // to get second param, <rawid>, get txid and do the following:
+	        //./bitcoin-cli -regtest getrawtransation <txid> --> outputs long <rawid>
+	        //./bitcoin-cli -regtest decoderawtransaction<rawid> --> outputs hashtable of tx to check.
+	        
+	        Transaction temp = new Transaction(params, hexStringToByteArray("01000000018000292266ef1b817eac51a5e1b98918e53cdc3b9ac231704f69b7d2da987b99000000006b483045022100952f58844697a3166b1e1062d498cba5a63ff0b493418ea820470172065f0f1302206c85736a69eb39979dd25392a1b60f2bcb0d4ec1e647296f85a6aa5c38aefdae012102583612dc34a5e8df2806c519027962719925d706aea1857e3df569ccc386c350ffffffff0200f90295000000002c76a9143cb5180e3a59bba6d3fcd1cdf8701d6d429fd63e88ac6910e04fd020ea3a6910a2d808002b30309d87f4ba08bf010000001976a9144e90eb242dd4e66197c6a8c6f4c261aff4a07bbc88ac00000000") );
+	        TransactionOutput output = temp.getOutput(0);	        
 	        System.out.println("Tansaction output:\n"+output);	 
 	        try{
-		        ECKey signingKey = new ECKey();
-		        Script unlocking = ScriptBuilder.createInputScript(null, signingKey, checksum1);		      
-		        TransactionInput Input = new TransactionInput(params, temp, unlocking.getProgram(), 0);//invalid TODO find way to make TransactionInput.
-
+	        	
+		        ECKey publicKey3 = wallet3.wallet().getIssuedReceiveKeys().get(0);
+		        /*found online ECDSASignature(Hash(Transaction-scriptSig)+PreTransaction_scriptPubKey)*/
+		        ECDSASignature sigECDSA = publicKey3.sign(output.getHash()/*I don't think I'm signing the right thing*/);
+		        
+		        TransactionSignature sig = new TransactionSignature(sigECDSA.r, sigECDSA.s);
+		        
+		        Script unlocking = ScriptBuilder.createInputScript(sig, publicKey3, checksum1);
+		        byte[] unlockingbytes = unlocking.getProgram();
+		        TransactionOutPoint outpoint = new TransactionOutPoint(params, output);
+		        TransactionInput Input = new TransactionInput(params, temp, unlockingbytes, outpoint);
+		        Input.setScriptSig(unlocking);
+		        
+		        
+		        
+		        System.out.println("Tansaction input:\n"+Input);
+		        
 		        Input.verify(output);
 		        
 	        }catch(Exception e){

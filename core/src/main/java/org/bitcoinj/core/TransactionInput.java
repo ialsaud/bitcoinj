@@ -420,8 +420,14 @@ public class TransactionInput extends ChildMessage {
      */
     public void verify(TransactionOutput output) throws VerificationException {
         if (output.parent != null) {
-            if (!getOutpoint().getHash().equals(output.getParentTransaction().getHash()))
+        	Sha256Hash inputhash = getOutpoint().getHash();
+        	Sha256Hash outputhash = output.getParentTransaction().getHash();
+            
+        	if (!inputhash.equals(outputhash))
                 throw new VerificationException("This input does not refer to the tx containing the output.");
+        			
+        	/*if (!getOutpoint().getHash().equals(output.getParentTransaction().getHash()))
+                throw new VerificationException("This input does not refer to the tx containing the output.");*/
             if (getOutpoint().getIndex() != output.getIndex())
                 throw new VerificationException("This input refers to a different output on the given tx.");
         }

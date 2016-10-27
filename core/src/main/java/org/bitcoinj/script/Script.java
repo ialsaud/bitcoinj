@@ -248,7 +248,7 @@ public class Script {
                 chunks.get(3).equalsOpCode(OP_EQUALVERIFY) &&
                 chunks.get(4).equalsOpCode(OP_CHECKSIG) &&
                 chunks.get(5).equalsOpCode(OP_VERIFY) &&
-                chunks.get(6).data.length == 32 &&
+                chunks.get(6).data.length == 32 &&//TODO
                 chunks.get(7).equalsOpCode(OP_EQUAL);
     }
     

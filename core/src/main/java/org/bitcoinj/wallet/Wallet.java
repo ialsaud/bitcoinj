@@ -4041,6 +4041,7 @@ public class Wallet extends BaseTaggableObject
         lock.lock();
         try {
             Transaction tx = req.tx;
+            System.out.println("sign tx: "+tx);
             List<TransactionInput> inputs = tx.getInputs();
             List<TransactionOutput> outputs = tx.getOutputs();
             checkState(inputs.size() > 0);
