@@ -1,0 +1,104 @@
+package org.bitcoinj.examples;
+
+
+import org.bitcoinj.core.*;
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.params.RegTestParams;
+import org.bitcoinj.utils.BriefLogFormatter;
+import org.bitcoinj.script.Script;
+import org.bitcoinj.script.ScriptBuilder;
+import org.bitcoinj.wallet.SendRequest;
+
+import java.io.File;
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import static org.bitcoinj.core.Coin.*;
+public class TestRecTx {
+    
+	  public static byte[] hexStringToByteArray(String s) {
+		  int len = s.length();
+		  byte[] data = new byte[len / 2];
+		  for (int i = 0; i < len; i += 2) {
+			  data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+					  				+ Character.digit(s.charAt(i+1), 16));
+		  }
+		  return data;
+	  }
+	
+	  public static void main(String[] args) throws Exception {
+	        BriefLogFormatter.init();
+	        final RegTestParams params = RegTestParams.get();
+	        byte[] checksum1 = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+	        byte[] checksum2 = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309e");
+	        boolean flag=true;
+	        int OP_EQUAL=0x87;  
+	        int OP_DUP=0x76;  
+	        int OP_HASH160=0xa9;  
+	        int OP_EQUALVERIFY=0x88;  
+	        int OP_CHECKSIG=0xac;  
+	        int OP_VERIFY=0x69;
+
+	        WalletAppKit wallet1 = new WalletAppKit(params, new File("."), "wallet1");
+	        WalletAppKit wallet2 = new WalletAppKit(params, new File("."), "wallet2");
+	        WalletAppKit wallet3 = new WalletAppKit(params, new File("."), "wallet3");
+	        WalletAppKit wallet4 = new WalletAppKit(params, new File("."), "wallet4");
+		    
+	        
+	        wallet1.connectToLocalHost();
+	        wallet1.setAutoSave(false);
+	        wallet1.startAsync();
+	        wallet1.awaitRunning();
+	        wallet2.connectToLocalHost();
+	        wallet2.setAutoSave(false);
+	        wallet2.startAsync();
+	        wallet2.awaitRunning();
+	        wallet3.connectToLocalHost();
+	        wallet3.setAutoSave(false);
+	        wallet3.startAsync();
+	        wallet3.awaitRunning();
+	        wallet4.connectToLocalHost();
+	        wallet4.setAutoSave(false);
+	        wallet4.startAsync();
+	        wallet4.awaitRunning();
+        
+	        TransactionOutput output;
+	        Transaction temp;
+	        Address address4 = wallet4.wallet().currentReceiveAddress();
+	        Set<Transaction> transactions = wallet3.wallet().getTransactions(true);
+	        // to get second param, <rawid>, get txid and do the following:
+	        //./bitcoin-cli -regtest getrawtransation <txid> --> outputs long <rawid>
+	        //./bitcoin-cli -regtest decoderawtransaction<rawid> --> outputs hashtable of tx to check.
+	        
+	        temp = new Transaction(params, hexStringToByteArray("010000000135dfd1c39af1f640a5747656dc04432d866b7b70e4805d804cd791132e7ff51a000000006b483045022100cb665b40f8456cda4b624e46030f8e73d735f985861711cb2239bfe2cecf98b7022049953c0f47598c2da76e79587141d0b6a6a8bf89021705b0eefec4717d84f7c90121035c78632798f5798947f6622466ac355688a6c80a929fb3f90743998c9c6e0b8affffffff0200f90295000000002c76a9143612c70b8e770e19cabe3b78278f9f53706593b388ac6910e04fd020ea3a6910a2d808002b30309d87f4ba08bf010000001976a91448191e768566eb826c34c0f031513098598f380b88ac00000000") );
+	        output = temp.getOutput(0);	        
+	        System.out.println("Tansaction output:\n"+output);	 
+	        try{
+		        ECKey signingKey = new ECKey();
+		        Script unlocking = ScriptBuilder.createInputScript(null, signingKey, checksum1);		      
+		        TransactionInput Input = 
+		        Input.setScriptSig(unlocking);
+		        
+		        Input.verify(output);
+		        
+	        }catch(Exception e){
+	        	e.printStackTrace();
+	        	System.out.println("Exception:\n"+e);
+	        } 
+	        
+	        
+	        
+	        Thread.sleep(1000);
+	        wallet1.stopAsync();
+	        wallet1.awaitTerminated();
+	        wallet2.stopAsync();
+	        wallet2.awaitTerminated();
+	        wallet3.stopAsync();
+	        wallet3.awaitTerminated();
+	        wallet4.stopAsync();
+	        wallet4.awaitTerminated();
+	       
+	}      
+	   
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 8 elements from project &apos;examples&apos;&#x0A;- Original project: &apos;examples&apos;&#x0A;- Original elements:&#x0A;     wallet1.spvchain&#x0A;     wallet1.wallet&#x0A;     wallet2.spvchain&#x0A;     wallet2.wallet&#x0A;     wallet3.spvchain&#x0A;     wallet3.wallet&#x0A;     wallet4.spvchain&#x0A;     wallet4.wallet" description="Delete elements" element1="wallet1.spvchain" element2="wallet3.spvchain" element3="wallet1.wallet" element4="wallet2.wallet" element5="wallet4.spvchain" element6="wallet2.spvchain" element7="wallet3.wallet" element8="wallet4.wallet" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="8" stamp="1477505757540" subPackages="false" version="1.0"/>
+</session>
