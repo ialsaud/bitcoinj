@@ -40,7 +40,8 @@ public class sendCustom {
 		int OP_ENDIF = 0x68;
 		int OP_DROP = 0x75;
 		int OP_VERIFYLOCKTIME=0xba;
-
+		int OP_SHA256 = 0xa8;
+		
 		BriefLogFormatter.init();
 		final RegTestParams params = RegTestParams.get();
 		int i;
@@ -63,14 +64,14 @@ public class sendCustom {
 		Address recWalletAddress = wallet3.wallet().currentReceiveAddress();    
 		Address sendWalletAddress = wallet2.wallet().currentReceiveAddress();    
 
-		Coin amount =Coin.COIN.multiply(10);
+		Coin amount =Coin.COIN.multiply(2);
 		Transaction tx = new Transaction(params); 
 		
 		
 		
 		long timestamp = new Timestamp(System.currentTimeMillis()).getTime();
 		BigInteger currentTime = new BigInteger(Long.toString(timestamp).substring(0, 10));
-		BigInteger time = BigInteger.valueOf(200).add(currentTime);//roughly 3 minutes = 200
+		BigInteger time = BigInteger.valueOf(-5).add(currentTime);//roughly 3 minutes = 200
 		System.out.println(time);
 		
 		byte[] timeBytes = Utils.reverseBytes(Utils.encodeMPI(time, false));
@@ -83,23 +84,24 @@ public class sendCustom {
 
 		// script responsible for timelock
 		// Sender: sig pubk [opif() 
-						// dup() hash() pubk equver() chksig() OP_VERIFY() checksum equchksm()
+						//dup() hash() pubk equver() chksig() OP_VERIFY() sha256() checksum equchksm()
 				// opelse() 
-						// time opcltv() opdrop() opdup() hash() pubk eqver() chsig()]
+						//time opcltv() opdrop() opdup() hash() pubk eqver() chsig()]
 		
-		// Receiver1: file sha256() sig pubk ff [dup() hash() pubk equ() chksig()]
+		// Receiver1: nop file sig pubk ff [dup() hash() pubk equ() chksig()]
 		// Receiver2: nop* nop* sig pubk 00 [dup() hash() pubk equ() chksig()]
 		// *to assure the functionality of Script.getScriptSigWithSignature
 
 
 		Script locking = new ScriptBuilder()
-				/*1 */.op(OP_IF)
-					/*2 */.op(OP_DUP)
-					/*3 */.op(OP_HASH160)
-					/*4 */.data(recWalletAddress.getHash160())
-					/*5 */.op(OP_EQUALVERIFY)
-					/*6 */.op(OP_CHECKSIG)
-					/*7 */.op(OP_VERIFY)
+				/*0 */.op(OP_IF)
+					/*1 */.op(OP_DUP)
+					/*2 */.op(OP_HASH160)
+					/*3 */.data(recWalletAddress.getHash160())
+					/*4 */.op(OP_EQUALVERIFY)
+					/*5 */.op(OP_CHECKSIG)
+					/*6 */.op(OP_VERIFY)
+					/*7*/.op(OP_SHA256)
 					/*8 */.data(checksum1)
 					/*9 */.op(OP_EQUAL)
 				/*10*/.op(OP_ELSE)

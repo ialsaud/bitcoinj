@@ -266,7 +266,7 @@ public class Script {
     }
     
     public boolean isTimeLockChecksumTx(){
-    	return chunks.size()==19 &&
+    	return chunks.size()==20 &&
     			 chunks.get(0).equalsOpCode(OP_IF);//TODO finish the rest of the conditions
     			/* chunks.get(1).equalsOpCode(OP_DUP) &&
                  chunks.get(2).equalsOpCode(OP_HASH160) &&
@@ -325,11 +325,11 @@ public class Script {
         long timestamp = new Timestamp(System.currentTimeMillis()).getTime();
         BigInteger l=new BigInteger(Long.toString(timestamp).substring(0, 10));
         //System.out.println(l);
-    	BigInteger k=castToBigInteger(chunks.get(10).data) ;
+    	BigInteger k=castToBigInteger(chunks.get(11).data) ;
     	if (k.compareTo(l) > 0 ){
     		return chunks.get(3).data;
     	}else{
-    		return chunks.get(15).data;    		
+    		return chunks.get(16).data;    		
     	}
     }
     public byte[] getPubKeyHash() throws ScriptException {
@@ -343,12 +343,12 @@ public class Script {
         	
             long timestamp = new Timestamp(System.currentTimeMillis()).getTime();
             BigInteger l=new BigInteger(Long.toString(timestamp).substring(0, 10));
-        	BigInteger k=castToBigInteger(chunks.get(10).data) ;
+        	BigInteger k=castToBigInteger(chunks.get(11).data) ;
         	
         	if (k.compareTo(l) > 0 )
         		return chunks.get(3).data;      	
         	else
-        		return chunks.get(15).data;    		
+        		return chunks.get(16).data;    		
         	
         }else
             throw new ScriptException("Script not in the standard scriptPubKey form");
@@ -589,8 +589,8 @@ public class Script {
         	sigsPrefixCount = 1; //<checksum> <sig>* <pubkey>
         	sigsSuffixCount = 1;
         } else if(isTimeLockChecksumTx()){
-        	sigsPrefixCount = 2; //<file> op_sha256 <sig>* <pubkey> <ff>
-        	sigsSuffixCount = 2; // nop nop <sig>* <pubkey> <00>
+        	sigsPrefixCount = 1; //<file> <sig>* <pubkey> <ff>
+        	sigsSuffixCount = 2; // nop <sig>* <pubkey> <00>
         }
         return ScriptBuilder.updateScriptWithSignature(scriptSig, sigBytes, index, sigsPrefixCount, sigsSuffixCount);
     }

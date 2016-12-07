@@ -4309,7 +4309,7 @@ implements NewBestBlockListener, TransactionReceivedInBlockListener, PeerFilterP
 
 
 			//TODO
-			ECKey key = findKeyFromPubHash(script.getPubKeyHash2(script));
+			ECKey key = findKeyFromPubHash(script.getPubKeyHash());
 			return key != null && (key.isEncrypted() || key.hasPrivKey());
 
 		}

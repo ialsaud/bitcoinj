@@ -89,6 +89,7 @@ public abstract class PeerSocketHandler extends AbstractTimeoutHandler implement
             serializer.serialize(message, out);
             writeTarget.writeBytes(out.toByteArray());
         } catch (IOException e) {
+        	e.printStackTrace();
             exceptionCaught(e);
         }
     }
@@ -183,6 +184,7 @@ public abstract class PeerSocketHandler extends AbstractTimeoutHandler implement
                 firstMessage = false;
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             exceptionCaught(e);
             return -1; // Returning -1 also throws an IllegalStateException upstream and kills the connection
         }

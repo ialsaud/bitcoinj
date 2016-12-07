@@ -510,7 +510,8 @@ public class Peer extends PeerSocketHandler {
             processVersionAck((VersionAck) m);
         } else if (m instanceof UTXOsMessage) {
             processUTXOMessage((UTXOsMessage) m);
-        } else if (m instanceof RejectMessage) {
+        } else if (m instanceof RejectMessage) {/*TODO*/
+        	System.out.println("PEER.JAVA *****************************************************************************");
             log.error("{} {}: Received {}", this, getPeerVersionMessage().subVer, m);
         } else {
             log.warn("{}: Received unhandled message: {}", this, m);

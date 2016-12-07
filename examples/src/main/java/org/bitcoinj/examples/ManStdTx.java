@@ -70,7 +70,7 @@ public class ManStdTx {
 						.op(OP_CHECKSIG)
 						.build();
 		        
-		        contract.addOutput(COIN.multiply(100), locking);
+		        contract.addOutput(COIN.multiply(3), locking);
 		        SendRequest req = SendRequest.forTx(contract);	        
 			    wallet1.wallet().completeTx(req);
 			    wallet1.peerGroup().broadcastTransaction(req.tx);

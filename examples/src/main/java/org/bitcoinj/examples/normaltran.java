@@ -40,7 +40,7 @@ public class normaltran {
 
 	        
 	        Address address2 = wallet2.wallet().currentReceiveAddress();
-	        Transaction tx = wallet1.wallet().createSend(address2, COIN.multiply(15));
+	        Transaction tx = wallet1.wallet().createSend(address2, COIN.multiply(2));
 	        final Peer peer = wallet1.peerGroup().getConnectedPeers().get(0);
 	        peer.sendMessage(tx);
 	        

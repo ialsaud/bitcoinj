@@ -52,12 +52,18 @@ public class reqtx2 {
         wallet4.startAsync();
         wallet4.awaitRunning();
      
+        
+//        wallet1.wallet().setAcceptRiskyTransactions(true);
+//        wallet2.wallet().setAcceptRiskyTransactions(true);
+//        wallet3.wallet().setAcceptRiskyTransactions(true);
+//        wallet4.wallet().setAcceptRiskyTransactions(true);
+        
        
         Address address4 = wallet4.wallet().currentReceiveAddress();
-        SendRequest req = SendRequest.to(address4, COIN.multiply(8));
-        req.tx.setLockTime(1480919005);
-        wallet2.wallet().completeTx(req);
+        SendRequest req = SendRequest.to(address4, COIN.multiply(2));
         
+        wallet2.wallet().completeTx(req);
+        req.tx.setLockTime(1481070100);
 
         System.out.println(req.tx);
         final Peer peer = wallet2.peerGroup().getConnectedPeers().get(0);

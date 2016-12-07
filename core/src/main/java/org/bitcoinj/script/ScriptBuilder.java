@@ -365,30 +365,25 @@ public class ScriptBuilder {
 
 
 	public static Script createTimeLockContractInputScript(@Nullable TransactionSignature signature, ECKey pubKey, Script script) {
+		byte[] file;
 		byte[] pubkeyBytes = pubKey.getPubKey();
 		byte[] sigBytes = signature != null ? signature.encodeToBitcoin() : new byte[]{};
 
-
-
-
 		long timestamp = new Timestamp(System.currentTimeMillis()).getTime();
 		BigInteger l=new BigInteger(Long.toString(timestamp).substring(0, 10));
-		BigInteger k= Utils.decodeMPI(Utils.reverseBytes(script.chunks.get(10).data), false);
-		
-		
-		byte[] file;
-		
+		BigInteger k= Utils.decodeMPI(Utils.reverseBytes(script.chunks.get(11).data), false);
 		
 		if (k.compareTo(l) > 0 ){
 			file = (new FileReaderChecksum("C:\\Users\\Ibrahim AlSaud\\Documents\\part1.txt"))
-								.getPortion(script.getChunks().get(7).data).getBytes();
+								.getPortion(script.getChunks().get(8).data).getBytes();
 
-			return new ScriptBuilder().data(file).op(OP_SHA256).data(sigBytes).data(pubkeyBytes).data(hexStringToByteArray("FF")).build();
+			return new ScriptBuilder().data(file).data(sigBytes).data(pubkeyBytes).data(hexStringToByteArray("FF")).build();
 		}else{
-			
-			return new ScriptBuilder().op(OP_NOP).op(OP_NOP).data(sigBytes).data(pubkeyBytes).data(hexStringToByteArray("00")).build();
+			return new ScriptBuilder().op(OP_NOP).data(sigBytes).data(pubkeyBytes).data(hexStringToByteArray("00")).build();
 		}
 	}
+	
+	
 	/**
 	 * Returns a copy of the given scriptSig with the signature inserted in the given position.
 	 *

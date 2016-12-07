@@ -66,7 +66,7 @@ public class reqtx {
         
 
         Address address4 = wallet4.wallet().currentReceiveAddress();
-        SendRequest req = SendRequest.to(address4, COIN.multiply(5));
+        SendRequest req = SendRequest.to(address4, COIN.multiply(1));
         wallet3.wallet().completeTx(req);
 
         System.out.println(req.tx);
